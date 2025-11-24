@@ -1,5 +1,4 @@
-fastapi
-uvicorn
 streamlit
-python-multipart
+pydantic
 requests
+# No heavy libs for demo stability
