@@ -38,6 +38,12 @@ The application consists of a FastAPI backend and a Streamlit frontend.
 4. Use the "Test Case Agent" tab to generate test cases (e.g., "Generate test cases for discount code").
 5. Select a test case and click "Generate Selenium Script".
 
+## Technical Implementation
+- **Backend**: FastAPI
+- **Frontend**: Streamlit
+- **Knowledge Base**: Lightweight in-memory vector storage for demonstration stability.
+- **RAG Pipeline**: Custom implementation for context retrieval and prompt engineering.
+
 ## Support Documents
 - `product_specs.md`: Business rules.
 - `ui_ux_guide.txt`: Visual requirements.
