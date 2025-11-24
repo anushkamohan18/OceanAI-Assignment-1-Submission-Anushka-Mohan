@@ -1,50 +1,69 @@
 # Autonomous QA Agent
 
+## Objective
+This project implements an intelligent, autonomous QA agent capable of constructing a "testing brain" from project documentation. It ingests support documents (specs, UI/UX guides) and HTML structure to generate comprehensive test cases and executable Selenium scripts.
+
+## Features
+- **Knowledge Base Ingestion**: Parses PDF, Markdown, TXT, JSON, and HTML files.
+- **RAG Pipeline**: Uses ChromaDB for vector storage and Google Gemini for reasoning.
+- **Test Case Generation**: Generates grounded test cases based on uploaded documents.
+- **Selenium Script Generation**: Converts test cases into runnable Python Selenium scripts.
+- **Single-Page UI**: Built with Streamlit for easy interaction.
+
 ## Setup Instructions
 
-1. **Prerequisites**: Python 3.9+
-2. **Create Virtual Environment**:
+### Prerequisites
+- Python 3.9+
+- Google Gemini API Key (Free tier available)
+
+### Installation
+1. Clone the repository.
+2. Create a virtual environment (optional but recommended):
    ```bash
-   python -m venv venv
-   # Windows
-   .\venv\Scripts\activate
-   # Linux/Mac
-   source venv/bin/activate
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
-3. **Install Dependencies**:
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-## Running the Application
+## How to Run
+The application is designed to run with a single command. The Streamlit frontend integrates directly with the FastAPI backend functions.
 
-The application consists of a FastAPI backend and a Streamlit frontend.
+```bash
+streamlit run streamlit_app.py
+```
 
-1. **Start Backend**:
-   ```bash
-   uvicorn app.backend.main:app --reload --port 8000
-   ```
+- **Frontend**: http://localhost:8501
 
-2. **Start Frontend**:
-   ```bash
-   streamlit run app/frontend/ui.py
-   ```
+**Note**: The FastAPI backend structure is maintained for compliance with assignment requirements. To run the FastAPI server separately (optional), use:
+```bash
+cd app/backend && uvicorn main:app --reload
+```
+- **Backend API Docs**: http://localhost:8000/docs
 
-## Usage
+## Usage Examples
+1. **Enter API Key**: Input your Google Gemini API Key in the sidebar.
+2. **Upload Documents**:
+   - Navigate to the `data/` folder.
+   - Upload `product_specs.md`, `ui_ux_guide.txt`, `api_endpoints.json`, and `checkout.html`.
+3. **Build Knowledge Base**: Click the "Build Knowledge Base" button.
+4. **Generate Test Cases**:
+   - Enter a feature name (e.g., "Discount Code").
+   - Click "Generate Test Cases".
+5. **Generate Script**:
+   - Select a generated test case.
+   - Click "Generate Selenium Script".
+   - Copy the generated code and run it locally.
 
-1. Open the Streamlit UI (usually http://localhost:8501).
-2. Upload `checkout.html` and support documents (`product_specs.md`, etc.) from the `data/` folder.
-3. Click "Build Knowledge Base".
-4. Use the "Test Case Agent" tab to generate test cases (e.g., "Generate test cases for discount code").
-5. Select a test case and click "Generate Selenium Script".
-
-## Technical Implementation
-- **Backend**: FastAPI
-- **Frontend**: Streamlit
-- **Knowledge Base**: Lightweight in-memory vector storage for demonstration stability.
-- **RAG Pipeline**: Custom implementation for context retrieval and prompt engineering.
-
-## Support Documents
-- `product_specs.md`: Business rules.
-- `ui_ux_guide.txt`: Visual requirements.
+## Included Support Documents (`data/`)
+- `checkout.html`: The target web application for testing.
+- `product_specs.md`: Defines business rules (discounts, shipping costs).
+- `ui_ux_guide.txt`: Defines UI requirements (error messages, button colors).
 - `api_endpoints.json`: Mock API definitions.
+
+## Project Structure
+- `app/backend/`: FastAPI backend logic (Ingestion, RAG, Models).
+- `streamlit_app.py`: Streamlit frontend.
+- `data/`: Sample assets.

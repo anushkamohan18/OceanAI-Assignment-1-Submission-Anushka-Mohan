@@ -13,4 +13,5 @@ pip-delete-this-directory.txt
 .idea/
 uploaded_files/
 chroma_db/
+data/chroma_db/
 *.log

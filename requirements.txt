@@ -1,4 +1,11 @@
 streamlit
 pydantic
 requests
-# No heavy libs for demo stability
+fastapi
+uvicorn
+chromadb
+sentence-transformers
+google-generativeai
+python-multipart
+beautifulsoup4
+pymupdf

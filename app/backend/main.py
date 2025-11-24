@@ -40,22 +40,28 @@ async def upload_files(files: List[UploadFile] = File(...)):
 
 @app.post("/generate_test_cases", response_model=List[TestCase])
 async def generate_tests(request: TestCaseRequest):
-    return generate_test_cases(request.query)
+    try:
+        return generate_test_cases(request.query, request.api_key)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/generate_script", response_model=ScriptResponse)
 async def generate_script(request: ScriptRequest):
-    # If HTML content is not provided in request, try to find it in uploads
-    html_content = request.html_content
-    if not html_content:
-        # Look for html file in uploads
-        for f in os.listdir(UPLOAD_DIR):
-            if f.endswith(".html"):
-                with open(os.path.join(UPLOAD_DIR, f), "r", encoding="utf-8") as file:
-                    html_content = file.read()
-                break
-    
-    script = generate_selenium_script(request.test_case, html_content or "")
-    return {"script_code": script}
+    try:
+        # If HTML content is not provided in request, try to find it in uploads
+        html_content = request.html_content
+        if not html_content:
+            # Look for html file in uploads
+            for f in os.listdir(UPLOAD_DIR):
+                if f.endswith(".html"):
+                    with open(os.path.join(UPLOAD_DIR, f), "r", encoding="utf-8") as file:
+                        html_content = file.read()
+                    break
+        
+        script = generate_selenium_script(request.test_case, html_content or "", request.api_key)
+        return {"script_code": script}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
