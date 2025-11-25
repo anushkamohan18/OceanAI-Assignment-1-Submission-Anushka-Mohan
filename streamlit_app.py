@@ -4,24 +4,162 @@ from app.backend.rag import generate_test_cases, generate_selenium_script
 
 # Page Config
 st.set_page_config(page_title="Autonomous QA Agent", layout="wide")
-st.title("🤖 Autonomous QA Agent")
-st.markdown("Generate Test Cases and Selenium Scripts from Documentation")
 
-# Sidebar for Configuration
-st.sidebar.header("Configuration")
-api_key = st.sidebar.text_input("Google Gemini API Key", type="password")
+# Custom CSS for styling
+st.markdown("""
+    <style>
+    /* Import fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif&family=Poppins:wght@400;600;700&display=swap');
+    
+    /* Main app background */
+    .stApp {
+        background-color: #090909;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    /* File uploader text */
+    .uploadedFileName,
+    [data-testid="stFileUploadDropzone"] span,
+    [data-testid="stFileUploadDropzone"] small,
+    [data-testid="stFileUploadDropzone"] p,
+    [data-testid="stFileUploadDropzone"] div,
+    section[data-testid="stFileUploadDropzone"] *,
+    section[data-testid="stFileUploadDropzone"] span {
+        color: #ffffff !important;
+    }
+    
+    /* Limit width and left align file uploader */
+    div[data-testid="stFileUploader"] {
+        width: 60% !important;
+        margin-left: 0 !important;
+        margin-right: auto !important;
+    }
+    
+    /* Browse files button */
+    button[kind="secondary"],
+    [data-testid="stFileUploadDropzone"] button {
+        background-color: #ffffff !important;
+        color: #090909 !important;
+        border: 2px solid #090909 !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: bold !important;
+    }
+    
+    /* All text color */
+    .stApp, .stMarkdown, .stText, h1, h2, h3, h4, h5, h6, p, label {
+        color: #D3FFE9 !important;
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px !important;
+    }
+    
+    /* Header sizes */
+    h1 {
+        font-size: 24px !important;
+    }
+    
+    h2 {
+        font-size: 18px !important;
+    }
+    
+    /* Input fields */
+    input, textarea, select {
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        color: #333 !important;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px !important;
+        padding: 0.5rem !important;
+        min-height: 0px !important;
+    }
+    
+    /* Adjust container height for inputs */
+    div[data-baseweb="input"] {
+        min-height: 35px !important;
+        height: 35px !important;
+    }
+
+    /* Limit width and left align input fields */
+    div[data-testid="stTextInput"] {
+        width: 60% !important;
+        margin-left: 0 !important;
+        margin-right: auto !important;
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        background-color: #4b5043 !important;
+        color: #ffffff !important;
+        border: none;
+        font-family: 'Poppins', sans-serif;
+        font-weight: bold;
+    }
+    
+    .stButton > button:hover {
+        background-color: #3a3f35;
+    }
+    
+    /* Code blocks */
+    .stCodeBlock {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Success/Warning/Error messages */
+    .stSuccess, .stWarning, .stError, [data-testid="stAlert"] {
+        background-color: #8DDBE0 !important;
+        color: #000000 !important;
+        border-radius: 5px;
+        padding: 10px;
+        width: 40% !important;
+        margin-left: 0 !important;
+        margin-right: auto !important;
+    }
+    
+    [data-testid="stAlert"] * {
+        color: #000000 !important;
+    }
+    
+    /* Radio buttons */
+    .stRadio > label {
+        color: #D3FFE9 !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Custom styled title
+st.markdown("""
+    <h1 style="
+        font-family: 'Poppins', sans-serif;
+        font-size: 56px;
+        text-align: center;
+        color: #D3FFE9;
+        font-weight: 600;
+        margin-bottom: 10px;
+    ">Autonomous QA Agent</h1>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+    <p style="
+        font-size: 24px;
+        text-align: center;
+        color: #D3FFE9;
+        margin-bottom: 30px;
+    ">Generate Test Cases and Selenium Scripts from Documentation</p>
+""", unsafe_allow_html=True)
+
+# Configuration
+st.header("Configuration")
+api_key = st.text_input("Google Gemini API Key", type="password")
 if not api_key:
-    st.sidebar.warning("Please enter your Google Gemini API Key to proceed.")
+    st.warning("Please enter your Google Gemini API Key to proceed.")
 
-# Sidebar for File Upload
-st.sidebar.header("1. Knowledge Base")
-uploaded_files = st.sidebar.file_uploader(
+# 1. Knowledge Base
+st.header("1. Knowledge Base")
+uploaded_files = st.file_uploader(
     "Upload Support Docs & HTML", 
     accept_multiple_files=True,
     type=['md', 'txt', 'json', 'html', 'pdf']
 )
 
-if st.sidebar.button("Build Knowledge Base"):
+if st.button("Build Knowledge Base"):
     if uploaded_files:
         with st.spinner("Building Knowledge Base..."):
             try:
@@ -41,11 +179,11 @@ if st.sidebar.button("Build Knowledge Base"):
                 
                 # Ingest documents
                 num_chunks = ingest_uploaded_files(file_data)
-                st.sidebar.success(f"Success! Knowledge Base Built Successfully ({num_chunks} chunks)")
+                st.success(f"Success! Knowledge Base Built Successfully ({num_chunks} chunks)")
             except Exception as e:
-                st.sidebar.error(f"Error: {e}")
+                st.error(f"Error: {e}")
     else:
-        st.sidebar.warning("Please upload files first.")
+        st.warning("Please upload files first.")
 
 # Main Area
 st.header("2. Test Case Generation")
