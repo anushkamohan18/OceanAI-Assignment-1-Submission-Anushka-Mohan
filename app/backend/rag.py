@@ -90,7 +90,11 @@ def generate_selenium_script(test_case: TestCase, html_content: str, api_key: st
     4. Include assertions to verify the Expected Result.
     5. Return ONLY the Python code. No markdown formatting, no explanations.
     6. Handle potential errors (try/except).
-    7. Ensure the script is complete and runnable.
+    7. Assume the page is hosted on http://localhost:8000/source.html
+       - Navigate to the page using: `driver.get("http://localhost:8000/source.html")`
+       - Do NOT embed any HTML content in the script
+    8. Ensure the script is complete and runnable.
+    9. Include a comment at the top: "# Note: Run 'python server.py' in a separate terminal before executing this script"
     
     Python Code:
     """

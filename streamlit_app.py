@@ -93,7 +93,7 @@ if 'test_cases' in st.session_state and st.session_state['test_cases']:
         else:
             with st.spinner("Generating script..."):
                 try:
-                    # Get HTML content from session state
+                    #Get HTML content from session state
                     html_content = st.session_state.get('html_content', '')
                     
                     if not html_content:
